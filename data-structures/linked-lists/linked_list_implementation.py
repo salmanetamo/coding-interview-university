@@ -35,11 +35,8 @@ class SinglyLinkedList:
 
     def push_front(self, value):
         node = Node(value)
-        if not self.head:
-            self.head = node
-        else:
-            node.next = self.head
-            self.head = node
+        node.next = self.head
+        self.head = node
         self.current_size += 1
 
     def pop_front(self):
@@ -121,10 +118,48 @@ class SinglyLinkedList:
         self.current_size -= 1
 
     def value_n_from_end(self, n):
-        pass
+        if not (0 <= n < self.current_size):
+            raise ValueError('Value out of bound')
 
-    def reverse(self, ):
-        pass
+        fast, slow = self.head, self.head
+        counter = 0
+        while counter < n:
+            fast = fast.next
+            counter += 1
+
+        while fast.next:
+            slow = slow.next
+            fast = fast.next
+
+        return slow.value
+
+    def reverse(self):
+        previous = None
+        current = self.head
+
+        while current.next:
+            next = current.next
+            current.next = previous
+            previous = current
+            current = next
+        self.head = current
 
     def remove_value(self, value):
-        pass
+        if not self.head:
+            return False
+
+        current = self.head
+        previous = None
+        while current:
+            if current.value == value:
+                if previous:
+                    previous.next = current.next
+                else:
+                    self.head = current.next
+                self.current_size -= 1
+                return True
+
+            previous = current
+            current = current.next
+
+        return False
