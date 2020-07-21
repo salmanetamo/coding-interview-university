@@ -1,3 +1,33 @@
+class QueueWithArray:
+    def __init__(self):
+        pass
+
+    def enqueue(self, value):
+        pass
+
+    def dequeue(self):
+        pass
+
+    def is_empty(self):
+        pass
+
+    def is_full(self):
+        pass
+
+
+class QueueWithLinkedList:
+    def __init__(self):
+        self.items = SinglyLinkedListWithTail()
+
+    def enqueue(self, value):
+        self.items.push_back(value)
+
+    def dequeue(self):
+        return self.items.pop_front()
+
+    def is_empty(self):
+        return self.items.is_empty()
+
 class Node:
     def __init__(self, value):
         self.value = value
@@ -5,18 +35,25 @@ class Node:
         self.previous = None
 
 
-class SinglyLinkedList:
+class SinglyLinkedListWithTail:
     def __init__(self, head=None):
         self.head = head
+        self.tail = None
         self.current_size = 0
 
     def size(self):
+        """Time complexity: O(1)"""
+        '''Space complexity: O(1)'''
         return self.current_size
 
     def is_empty(self, ):
+        """Time complexity: O(1)"""
+        '''Space complexity: O(1)'''
         return self.current_size == 0
 
     def value_at(self, index):
+        """Time complexity: O(n)"""
+        '''Space complexity: O(1)'''
         if not (0 <= index < self.current_size):
             raise IndexError('Index out of bound')
 
@@ -34,34 +71,43 @@ class SinglyLinkedList:
             return None
 
     def push_front(self, value):
+        """Time complexity: O(1)"""
+        '''Space complexity: O(1)'''
         node = Node(value)
         node.next = self.head
         self.head = node
+        if not self.tail:
+            self.tail = node
         self.current_size += 1
 
     def pop_front(self):
+        """Time complexity: O(1)"""
+        '''Space complexity: O(1)'''
         if not self.head:
             return None
         else:
             value = self.head.value
             self.head = self.head.next
-
+            if not self.head:
+                self.tail = None
             self.current_size -= 1
             return value
 
     def push_back(self, value):
+        """Time complexity: O(1)"""
+        '''Space complexity: O(1)'''
         node = Node(value)
         if not self.head:
             self.head = node
+            self.tail = node
         else:
-            current = self.head
-            while current.next:
-                current = current.next
-            current.next = node
+            self.tail.next = node
+            self.tail = node
         self.current_size += 1
 
     def pop_back(self):
-
+        """Time complexity: O(1)"""
+        '''Space complexity: O(1)'''
         if not self.head:
             value = self.head.value
         else:
@@ -70,30 +116,35 @@ class SinglyLinkedList:
                 current = current.next
             value = current.value
             current.next = None
+            self.tail = current
         self.current_size -= 1
         return value
 
     def front(self):
+        """Time complexity: O(1)"""
+        '''Space complexity: O(1)'''
         return self.head.value if self.head else None
 
     def back(self):
-        if not self.head:
-            value = self.head.value
+        """Time complexity: O(1)"""
+        '''Space complexity: O(1)'''
+        if not self.tail:
+            value = None
         else:
-            current = self.head
-            while current.next:
-                current = current.next
-            value = current.value
+            value = self.tail.value
 
         return value
 
     def insert(self, index, value):
+        """Time complexity: O(n)"""
+        '''Space complexity: O(1)'''
         if not (0 <= index < self.current_size):
             raise IndexError('Index out of bound')
 
         node = Node(value)
         if not self.head:
             self.head = node
+            self.tail = node
         else:
             current = self.head
             counter = 0
@@ -102,9 +153,13 @@ class SinglyLinkedList:
                 counter += 1
             node.next = current.next
             current.next = node
+            if not node.next:
+                self.tail = node
         self.current_size += 1
 
     def erase(self, index):
+        """Time complexity: O(n)"""
+        '''Space complexity: O(1)'''
         if not (0 <= index < self.current_size):
             raise IndexError('Index out of bound')
 
@@ -115,9 +170,13 @@ class SinglyLinkedList:
             counter += 1
 
         current.next = current.next.next
+        if not current.next:
+            self.tail = current
         self.current_size -= 1
 
     def value_n_from_end(self, n):
+        """Time complexity: O(n)"""
+        '''Space complexity: O(1)'''
         if not (0 <= n < self.current_size):
             raise ValueError('Value out of bound')
 
@@ -134,6 +193,8 @@ class SinglyLinkedList:
         return slow.value
 
     def reverse(self):
+        """Time complexity: O(1)"""
+        '''Space complexity: O(n)'''
         previous = None
         current = self.head
 
@@ -145,6 +206,8 @@ class SinglyLinkedList:
         self.head = current
 
     def remove_value(self, value):
+        """Time complexity: O(n)"""
+        '''Space complexity: O(1)'''
         if not self.head:
             return False
 
