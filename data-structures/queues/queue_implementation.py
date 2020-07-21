@@ -1,18 +1,38 @@
 class QueueWithArray:
-    def __init__(self):
-        pass
+    def __init__(self, max_size=16):
+        self.queue = list()
+        self.max_size = max_size
+        self.head = 0
+        self.tail = 0
 
     def enqueue(self, value):
-        pass
+        if self.is_full():
+            return ("Queue is full!")
+        else:
+            self.queue.append(value)
+            self.tail = (self.tail + 1) % self.max_size
+            return True
 
     def dequeue(self):
-        pass
+        if self.is_empty():
+            return ("Queue is empty!")
+        else:
+            value = self.queue[self.head]
+            self.head = (self.head + 1) % self.max_size
+            return value
+
+    def size(self):
+        if self.tail >= self.head:
+            qSize = self.tail - self.head
+        else:
+            qSize = self.max_size - (self.head - self.tail)
+        return qSize
 
     def is_empty(self):
-        pass
+        return self.size() == 0
 
     def is_full(self):
-        pass
+        return self.size() == self.max_size - 1
 
 
 class QueueWithLinkedList:
